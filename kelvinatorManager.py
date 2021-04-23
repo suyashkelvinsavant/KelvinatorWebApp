@@ -29,7 +29,7 @@ while True:
                             symbol=dataList[i]['symbol']
                             currentPrice=dataList[i]['regularMarketPrice']
                             #print(symbol,currentPrice)
-                            print(l)
+                            #print(l)
                             if(symbol==tradeList[l][1]):
                                 hour=datetime.fromtimestamp(mQuoteresponse.json()['quoteResponse']['result'][0]['regularMarketTime']).hour
                                 tradeList[l][4]=currentPrice

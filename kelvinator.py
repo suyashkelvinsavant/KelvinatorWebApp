@@ -32,9 +32,9 @@ while True:
                 i=len(s)-1
                 j=len(p)-1
                 k=len(d)-1
-                if(s[i-2][3]<s[i-2][4] and s[i-1][3]>s[i-1][4] and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+                if(s[i-4][3]<s[i-4][4] and s[i-3][3]>s[i-3][4] and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
                     tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Buy','text':d[k][1]})
-                elif(s[i-2][3]>s[i-2][4] and s[i-1][3]<s[i-1][4] and p[j][3]<p[j][4] and d[k][3]<d[k][4]):    
+                elif(s[i-4][3]>s[i-4][4] and s[i-3][3]<s[i-3][4] and p[j][3]<p[j][4] and d[k][3]<d[k][4]):    
                     tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Sell','text':d[k][1]})
             with open('./website/json/signal/tradeList.json','w')as outfile:
                 json.dump(tradeList,outfile)
