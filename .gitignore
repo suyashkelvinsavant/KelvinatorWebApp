@@ -1,0 +1,10 @@
+.vscode
+website/__pycache__
+__pycache__
+.github
+#website/database.db
+venv
+*.json
+!stockList.json
+!tradeList.json
+!tradeHistory.json

@@ -1,0 +1,1 @@
+# Kelvinator Trading Bot
