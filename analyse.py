@@ -26,8 +26,8 @@ def analyse(data,timeframe):
         rsi=rsi[len(rsi)-len(wma):]
         ema=ema[len(ema)-len(wma):]
         tempIndicatorData=list(zip(timestamp,close,rsi,rsiEma,wma,ema))
-        with open(f'./website/json/indicator/{symbol}{timeframe}.json','w')as outfile:
-            json.dump(tempIndicatorData,outfile)
+        # with open(f'./website/json/indicator/{symbol}{timeframe}.json','w')as outfile:
+        #     json.dump(tempIndicatorData,outfile)
         indicator[f"{symbol}"]=tempIndicatorData
     with open(f'./website/json/indicator/indicator{timeframe}.json','w')as outfile:
             json.dump(indicator,outfile)

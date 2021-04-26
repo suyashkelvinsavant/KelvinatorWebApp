@@ -22,7 +22,7 @@ def loadThirtyData():
     stData={}
     for sList in sData:
         for stock in sList['spark']['result']:
-            stData[f"{stock['symbol']}"]={"marketPrice":stock['response'][0]['meta']['regularMarketPrice'],"timestamp":stock['response'][0]['timestamp'],"close":stock['response'][0]['indicators']['quote'][0]['close']}
+            stData[f"{stock['symbol']}"]={"timestamp":stock['response'][0]['timestamp'],"close":stock['response'][0]['indicators']['quote'][0]['close']}
     with open('./website/json/stocksData/stocksThirtyData.json','w')as outfile:
         json.dump(stData,outfile)
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

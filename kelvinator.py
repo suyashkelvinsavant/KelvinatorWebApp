@@ -7,42 +7,292 @@ from datetime import datetime
 import requests
 import time
 import schedule
+emptyArray=[]
+with open('./website/json/signal/tradeList.json','w')as outfile:
+    json.dump(emptyArray,outfile)
+with open('./website/json/signal/tradeHistory.json','w')as of:
+    json.dump(emptyArray,of)
 
-while True:
+
+def kelvinator():
+    print("Kelvinator Started")
     marketStatusUrl = 'https://in.finance.yahoo.com/_finance_doubledown/api/resource/finance.market-time?bkt=finance-IN-en-IN-def&device=desktop&ecma=modern&feature=canvassOffnet%2CccOnMute%2CdisableCommentsMessage%2Cdebouncesearch100%2CdeferDarla%2CecmaModern%2CemptyServiceWorker%2CenableCCPAFooter%2CenableCMP%2CenableConsentData%2CenableGuceJs%2CenableGuceJsOverlay%2CenableNavFeatureCue%2CenablePrivacyUpdate%2CenableStreamDebounce%2CenableTheming%2CenableUpgradeLeafPage%2CenableVideoURL%2CenableYahooSans%2CenableYodleeErrorMsgCriOS%2CncpListStream%2CncpPortfolioStream%2CncpQspStream%2CncpStream%2CncpStreamIntl%2CncpTopicStream%2CnewContentAttribution%2CnewLogo%2CrelatedVideoFeature%2CvideoNativePlaylist%2CenhanceAddToWL&intl=in&lang=en-IN&partner=none&prid=4ju31mdfltmvl&region=IN&site=finance&tz=Asia%2FKolkata&ver=0.102.3964&returnMeta=true'
     mStatusresponse=requests.get(url=marketStatusUrl)
     mStatus=mStatusresponse.json()['data']['status']
-    #print(mStatus)
     if(mStatus=='open'):
-        while mStatus=='open':#True:#mStatus=='open':
-            data=loadData()
-            dataThirty=loadThirtyData()
-            dataHour=loadHourData()
-            print('loaded Data')
-            indicator=analyse(data,5)
-            indicatorThirty=analyse(dataThirty,30)
-            indicatorHour=analyse(dataHour,60)
-            print('analysed Data')
-            with open('./website/json/signal/tradeList.json') as f:
-                tradeList = json.load(f)  
-            for symbol in indicatorHour:
-                s=indicatorHour[symbol]
-                p=indicatorThirty[symbol]
-                d=indicator[symbol]
-                i=len(s)-1
-                j=len(p)-1
-                k=len(d)-1
-                if(s[i-4][3]<s[i-4][4] and s[i-3][3]>s[i-3][4] and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
-                    tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Buy','text':d[k][1]})
-                elif(s[i-4][3]>s[i-4][4] and s[i-3][3]<s[i-3][4] and p[j][3]<p[j][4] and d[k][3]<d[k][4]):    
-                    tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Sell','text':d[k][1]})
-            with open('./website/json/signal/tradeList.json','w')as outfile:
-                json.dump(tradeList,outfile)
-            time.sleep(3600)
-            mStatusresponse=requests.get(url=marketStatusUrl)
-            mStatus=mStatusresponse.json()['data']['status']
-    else:
-        time.sleep(60)
+        print("Market is Open")
+        data=loadData()
+        dataThirty=loadThirtyData()
+        dataHour=loadHourData()
+        print('loaded Data')
+        indicator=analyse(data,5)
+        indicatorThirty=analyse(dataThirty,30)
+        indicatorHour=analyse(dataHour,60)
+        print('analysed Data')
+        with open('./website/json/signal/tradeList.json') as f:
+            tradeList = json.load(f)
+        for symbol in indicatorHour:
+            s=indicatorHour[symbol]
+            p=indicatorThirty[symbol]
+            d=indicator[symbol]
+            i=len(s)-1
+            j=len(p)-1
+            k=len(d)-1
+            hour=datetime.fromtimestamp((s[i][0]/1000)-19800).hour
+            minute=datetime.fromtimestamp((s[i][0]/1000)-19800).minute
+            hour0=s[i-2]
+            hour1=s[i-1]
+            if((hour==11 and minute>=15) or (hour==12 and minute>=15 )or(hour==13 and minute>=15 )or(hour==14 and minute>=15 )):
+                print("its 11:15")
+                if(hour0[3]<hour0[4] and hour1[3]>hour1[4] and hour1[3]-hour1[4]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+                    tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])              
+                elif(hour0[3]>hour0[4] and hour0[3]<hour1[4] and hour1[4]-hour1[3]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+                    tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])
+    with open('./website/json/signal/tradeList.json','w')as outfile:
+        json.dump(tradeList,outfile)
+            
+
+
+
+
+
+
+schedule.every().monday.at("11:15:50").do(kelvinator)
+schedule.every().monday.at("12:15:50").do(kelvinator)
+schedule.every().monday.at("13:15:50").do(kelvinator)
+schedule.every().monday.at("14:15:50").do(kelvinator)
+schedule.every().tuesday.at("11:15:50").do(kelvinator)
+schedule.every().tuesday.at("12:15:50").do(kelvinator)
+schedule.every().tuesday.at("13:15:50").do(kelvinator)
+schedule.every().tuesday.at("14:15:50").do(kelvinator)
+schedule.every().wednesday.at("11:15:50").do(kelvinator)
+schedule.every().wednesday.at("12:15:50").do(kelvinator)
+schedule.every().wednesday.at("13:15:50").do(kelvinator)
+schedule.every().wednesday.at("14:15:50").do(kelvinator)
+schedule.every().thursday.at("11:15:50").do(kelvinator)
+schedule.every().thursday.at("12:15:50").do(kelvinator)
+schedule.every().thursday.at("13:15:50").do(kelvinator)
+schedule.every().thursday.at("14:15:50").do(kelvinator)
+schedule.every().friday.at("11:15:50").do(kelvinator)
+schedule.every().friday.at("12:15:50").do(kelvinator)
+schedule.every().friday.at("13:15:50").do(kelvinator)
+schedule.every().friday.at("14:15:50").do(kelvinator)
+#print(datetime.fromtimestamp((1617097500000/1000)-19800).minute,datetime.fromtimestamp((1617097500000/1000)-19800).second)
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# while True:
+#     marketStatusUrl = 'https://in.finance.yahoo.com/_finance_doubledown/api/resource/finance.market-time?bkt=finance-IN-en-IN-def&device=desktop&ecma=modern&feature=canvassOffnet%2CccOnMute%2CdisableCommentsMessage%2Cdebouncesearch100%2CdeferDarla%2CecmaModern%2CemptyServiceWorker%2CenableCCPAFooter%2CenableCMP%2CenableConsentData%2CenableGuceJs%2CenableGuceJsOverlay%2CenableNavFeatureCue%2CenablePrivacyUpdate%2CenableStreamDebounce%2CenableTheming%2CenableUpgradeLeafPage%2CenableVideoURL%2CenableYahooSans%2CenableYodleeErrorMsgCriOS%2CncpListStream%2CncpPortfolioStream%2CncpQspStream%2CncpStream%2CncpStreamIntl%2CncpTopicStream%2CnewContentAttribution%2CnewLogo%2CrelatedVideoFeature%2CvideoNativePlaylist%2CenhanceAddToWL&intl=in&lang=en-IN&partner=none&prid=4ju31mdfltmvl&region=IN&site=finance&tz=Asia%2FKolkata&ver=0.102.3964&returnMeta=true'
+#     mStatusresponse=requests.get(url=marketStatusUrl)
+#     mStatus=mStatusresponse.json()['data']['status']
+#     #print(mStatus)
+#     if(mStatus=='open'):
+#         while mStatus=='open':#True:#mStatus=='open':
+#             data=loadData()
+#             dataThirty=loadThirtyData()
+#             dataHour=loadHourData()
+#             print('loaded Data')
+#             indicator=analyse(data,5)
+#             indicatorThirty=analyse(dataThirty,30)
+#             indicatorHour=analyse(dataHour,60)
+#             print('analysed Data')
+#             with open('./website/json/signal/tradeList.json') as f:
+#                 tradeList = json.load(f)  
+#             for symbol in indicatorHour:
+#                 s=indicatorHour[symbol]
+#                 p=indicatorThirty[symbol]
+#                 d=indicator[symbol]
+#                 i=len(s)-1
+#                 j=len(p)-1
+#                 k=len(d)-1
+#                 if(s[i-4][3]<s[i-4][4] and s[i-3][3]>s[i-3][4] and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+#                     tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Buy','text':d[k][1]})
+#                 elif(s[i-4][3]>s[i-4][4] and s[i-3][3]<s[i-3][4] and p[j][3]<p[j][4] and d[k][3]<d[k][4]):    
+#                     tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Sell','text':d[k][1]})
+#             with open('./website/json/signal/tradeList.json','w')as outfile:
+#                 json.dump(tradeList,outfile)
+#             time.sleep(3600)
+#             mStatusresponse=requests.get(url=marketStatusUrl)
+#             mStatus=mStatusresponse.json()['data']['status']
+#     else:
+#         time.sleep(60)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from loadData import loadData
+# from loadThirtyData import loadThirtyData
+# from loadHourData import loadHourData
+# from analyse import analyse
+# import json
+# from datetime import datetime
+# import requests
+# import time
+# import schedule
+# emptyArray=[]
+# with open('./website/json/signal/tradeList.json','w')as outfile:
+#     json.dump(emptyArray,outfile)
+# with open('./website/json/signal/tradeHistory.json','w')as of:
+#     json.dump(emptyArray,of)
+# while True:
+#     marketStatusUrl = 'https://in.finance.yahoo.com/_finance_doubledown/api/resource/finance.market-time?bkt=finance-IN-en-IN-def&device=desktop&ecma=modern&feature=canvassOffnet%2CccOnMute%2CdisableCommentsMessage%2Cdebouncesearch100%2CdeferDarla%2CecmaModern%2CemptyServiceWorker%2CenableCCPAFooter%2CenableCMP%2CenableConsentData%2CenableGuceJs%2CenableGuceJsOverlay%2CenableNavFeatureCue%2CenablePrivacyUpdate%2CenableStreamDebounce%2CenableTheming%2CenableUpgradeLeafPage%2CenableVideoURL%2CenableYahooSans%2CenableYodleeErrorMsgCriOS%2CncpListStream%2CncpPortfolioStream%2CncpQspStream%2CncpStream%2CncpStreamIntl%2CncpTopicStream%2CnewContentAttribution%2CnewLogo%2CrelatedVideoFeature%2CvideoNativePlaylist%2CenhanceAddToWL&intl=in&lang=en-IN&partner=none&prid=4ju31mdfltmvl&region=IN&site=finance&tz=Asia%2FKolkata&ver=0.102.3964&returnMeta=true'
+#     mStatusresponse=requests.get(url=marketStatusUrl)
+#     mStatus=mStatusresponse.json()['data']['status']
+#     #print(mStatus)
+#     if(mStatus=='open'):
+#         while mStatus=='open':#True:#mStatus=='open':
+#             data=loadData()
+#             dataThirty=loadThirtyData()
+#             dataHour=loadHourData()
+#             print('loaded Data')
+#             indicator=analyse(data,5)
+#             indicatorThirty=analyse(dataThirty,30)
+#             indicatorHour=analyse(dataHour,60)
+#             print('analysed Data')
+#             with open('./website/json/signal/tradeList.json') as f:
+#                 tradeList = json.load(f)  
+#             for symbol in indicatorHour:
+#                 s=indicatorHour[symbol]
+#                 p=indicatorThirty[symbol]
+#                 d=indicator[symbol]
+#                 i=len(s)-1
+#                 j=len(p)-1
+#                 k=len(d)-1
+#                 if(s[i-4][3]<s[i-4][4] and s[i-3][3]>s[i-3][4] and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+#                     tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Buy','text':d[k][1]})
+#                 elif(s[i-4][3]>s[i-4][4] and s[i-3][3]<s[i-3][4] and p[j][3]<p[j][4] and d[k][3]<d[k][4]):    
+#                     tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])#{'x':d[k][0],'title':'Sell','text':d[k][1]})
+#             with open('./website/json/signal/tradeList.json','w')as outfile:
+#                 json.dump(tradeList,outfile)
+#             time.sleep(3600)
+#             mStatusresponse=requests.get(url=marketStatusUrl)
+#             mStatus=mStatusresponse.json()['data']['status']
+#     else:
+#         time.sleep(60)
 
 # from loadData import loadData
 # from loadThirtyData import loadThirtyData
