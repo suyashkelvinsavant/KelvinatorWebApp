@@ -42,8 +42,7 @@ def kelvinator():
             minute=datetime.fromtimestamp((s[i][0]/1000)-19800).minute
             hour0=s[i-2]
             hour1=s[i-1]
-            if((hour==11 and minute>=15) or (hour==12 and minute>=15 )or(hour==13 and minute>=15 )or(hour==14 and minute>=15 )):
-                print("its 11:15")
+            if((hour==10 and minute>=15)or(hour==11 and minute>=15) or (hour==12 and minute>=15 )or(hour==13 and minute>=15 )or(hour==14 and minute>=15 )):
                 if(hour0[3]<hour0[4] and hour1[3]>hour1[4] and hour1[3]-hour1[4]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
                     tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])              
                 elif(hour0[3]>hour0[4] and hour0[3]<hour1[4] and hour1[4]-hour1[3]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
@@ -57,22 +56,27 @@ def kelvinator():
 
 
 
+schedule.every().monday.at("10:15:50").do(kelvinator)
 schedule.every().monday.at("11:15:50").do(kelvinator)
 schedule.every().monday.at("12:15:50").do(kelvinator)
 schedule.every().monday.at("13:15:50").do(kelvinator)
 schedule.every().monday.at("14:15:50").do(kelvinator)
+schedule.every().tuesday.at("10:15:50").do(kelvinator)
 schedule.every().tuesday.at("11:15:50").do(kelvinator)
 schedule.every().tuesday.at("12:15:50").do(kelvinator)
 schedule.every().tuesday.at("13:15:50").do(kelvinator)
 schedule.every().tuesday.at("14:15:50").do(kelvinator)
+schedule.every().wednesday.at("10:15:50").do(kelvinator)
 schedule.every().wednesday.at("11:15:50").do(kelvinator)
 schedule.every().wednesday.at("12:15:50").do(kelvinator)
 schedule.every().wednesday.at("13:15:50").do(kelvinator)
 schedule.every().wednesday.at("14:15:50").do(kelvinator)
+schedule.every().thursday.at("10:15:50").do(kelvinator)
 schedule.every().thursday.at("11:15:50").do(kelvinator)
 schedule.every().thursday.at("12:15:50").do(kelvinator)
 schedule.every().thursday.at("13:15:50").do(kelvinator)
 schedule.every().thursday.at("14:15:50").do(kelvinator)
+schedule.every().friday.at("10:15:50").do(kelvinator)
 schedule.every().friday.at("11:15:50").do(kelvinator)
 schedule.every().friday.at("12:15:50").do(kelvinator)
 schedule.every().friday.at("13:15:50").do(kelvinator)
