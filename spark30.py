@@ -1,8 +1,11 @@
 import grequests
+import requests
+
 import json
 import time
+from datetime import datetime
 
-def loadThirtyData():
+def spark30():
     # with open('./json/stocksData/stocksThirtyData.json') as f:
     #    stData = json.load(f)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -22,8 +25,20 @@ def loadThirtyData():
     stData={}
     for sList in sData:
         for stock in sList['spark']['result']:
+            stockChartUrl = f"https://query1.finance.yahoo.com/v7/finance/chart/{stock['symbol']}?range=1d&interval=30m"
+            stockChartResponse=requests.get(url=stockChartUrl)
+            chartClose=stockChartResponse.json()['chart']['result'][0]['indicators']['quote'][0]['close']
+            chartTimestamp=stockChartResponse.json()['chart']['result'][0]['timestamp']
+            for i in range(len(stock['response'][0]['timestamp'])):
+                a=datetime.now()
+                if(datetime.fromtimestamp(stock['response'][0]['timestamp'][i]).day==a.day and datetime.fromtimestamp(stock['response'][0]['timestamp'][i]).month==a.month):
+                    stock['response'][0]['timestamp']=stock['response'][0]['timestamp'][:-(len(stock['response'][0]['timestamp'])-i)]
+                    stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close'][:-(len(stock['response'][0]['indicators']['quote'][0]['close'])-i)]
+                    break
+            stock['response'][0]['timestamp']=stock['response'][0]['timestamp']+chartTimestamp
+            stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close']+chartClose
             stData[f"{stock['symbol']}"]={"timestamp":stock['response'][0]['timestamp'],"close":stock['response'][0]['indicators']['quote'][0]['close']}
-    with open('./website/json/stocksData/stocksThirtyData.json','w')as outfile:
+    with open('./website/json/stocksData/spark30.json','w')as outfile:
         json.dump(stData,outfile)
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     return stData

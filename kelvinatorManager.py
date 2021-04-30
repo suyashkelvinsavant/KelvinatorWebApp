@@ -16,7 +16,7 @@ while True:
                 if(len(tradeList)>0):
                     symbolList=[]
                     #print(len(tradeList))
-                    for l in range(0,len(tradeList)):
+                    for l in range(len(tradeList)):
                         #print(l)
                         if(tradeList[l][7]=='Running'):
                             symbolList.append(tradeList[l][1])
@@ -25,7 +25,7 @@ while True:
                     mQuoteresponse=requests.get(url=marketQuoteUrl)
                     dataList=mQuoteresponse.json()['quoteResponse']['result']
                     for i in range(len(dataList)):
-                        for l in range(0,len(tradeList)-1):
+                        for l in range(len(tradeList)):
                             symbol=dataList[i]['symbol']
                             currentPrice=dataList[i]['regularMarketPrice']
                             #print(symbol,currentPrice)

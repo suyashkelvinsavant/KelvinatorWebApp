@@ -1,18 +1,14 @@
-from loadData import loadData
-from loadThirtyData import loadThirtyData
-from loadHourData import loadHourData
+import time,json,schedule,numbers
+import numpy as np
+from chart5 import chart5
+from chart30 import chart30
+from chart60 import chart60
+from spark5 import spark5
+from spark30 import spark30
+from spark60 import spark60
 from analyse import analyse
-import json
-from datetime import datetime
+from screener import screener
 import requests
-import time
-import schedule
-emptyArray=[]
-with open('./website/json/signal/tradeList.json','w')as outfile:
-    json.dump(emptyArray,outfile)
-with open('./website/json/signal/tradeHistory.json','w')as of:
-    json.dump(emptyArray,of)
-
 
 def kelvinator():
     print("Kelvinator Started")
@@ -21,14 +17,16 @@ def kelvinator():
     mStatus=mStatusresponse.json()['data']['status']
     if(mStatus=='open'):
         print("Market is Open")
-        data=loadData()
-        dataThirty=loadThirtyData()
-        dataHour=loadHourData()
-        print('loaded Data')
-        indicator=analyse(data,5)
+        print("Downloading Data")
+        dataFive=chart5()
+        dataThirty=chart30()
+        dataHour=chart60()
+        print("Downloading Complete")
+        print("Analysing Data")
+        indicator=analyse(dataFive,5)
         indicatorThirty=analyse(dataThirty,30)
         indicatorHour=analyse(dataHour,60)
-        print('analysed Data')
+        print("Analysing Complete")
         with open('./website/json/signal/tradeList.json') as f:
             tradeList = json.load(f)
         for symbol in indicatorHour:
@@ -49,13 +47,37 @@ def kelvinator():
                     tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])
     with open('./website/json/signal/tradeList.json','w')as outfile:
         json.dump(tradeList,outfile)
-            
+        
+start=time.time()
+
+print("Market is Open")
+print("Downloading Data")
+
+#sparkFive=spark5()
+#sparkThirty=spark30()
+sparkHour=spark60()
+#chartFive=chart5()
+#chartThirty=chart30()
+#chartHour=chart60()
+
+
+print("Downloading Complete")
+print("Analysing Data")
+#indicator=analyse(sparkFive,5)
+#indicatorThirty=analyse(sparkThirty,30)
+indicatorHour=analyse(sparkHour,60)
+end=time.time()
+print("Analysing Complete",end-start)
 
 
 
 
 
 
+
+
+'''
+schedule.every().day.at("09:00:00").do(screener)
 schedule.every().monday.at("10:16:00").do(kelvinator)
 schedule.every().monday.at("11:16:00").do(kelvinator)
 schedule.every().monday.at("12:16:00").do(kelvinator)
@@ -81,15 +103,126 @@ schedule.every().friday.at("11:16:00").do(kelvinator)
 schedule.every().friday.at("12:16:00").do(kelvinator)
 schedule.every().friday.at("13:16:00").do(kelvinator)
 schedule.every().friday.at("14:16:00").do(kelvinator)
-#print(datetime.fromtimestamp((1617097500000/1000)-19800).minute,datetime.fromtimestamp((1617097500000/1000)-19800).second)
 while True:
     schedule.run_pending()
     time.sleep(1)
+'''
+
+# start=time.time()
+# with open('./website/json/stocksData/chart5.json') as f:
+#         dataFive = json.load(f)
+# with open('./website/json/stocksData/chart30.json') as f:
+#         dataThirty = json.load(f)
+# with open('./website/json/stocksData/chart60.json') as f:
+#         dataHour = json.load(f)
+# #analyse(dataFive,5)
+# #analyse(dataThirty,30)
+# #analyse(dataHour,60)
+
+# npClose=np.array(dataHour['IIFL.NS']['close'])
+# close=dataHour['IIFL.NS']['close']
+# indexes=[]
+# print(len(close))
+# for i in range(len(close)):
+#     if close[i] is None:
+#         indexes.append(i)
+# for index in indexes:
+#     close.pop(index)
+# dataHour['IIFL.NS']['close']=close
+# print(close)
+
+# for i in range(len(dataHour['IIFL.NS']['close'])):
+#     if close[i] is None:
+#         print(close[i])
+# #print(indexes)
+# with open('./website/json/stocksData/chart60.json','w')as outfile:
+#         json.dump(dataHour,outfile)
+# end=time.time()
+
+# print("data loaded",end-start)
+    # print(npClose[i],type(npClose[i]))
+    #print(close[i])
+    #if isinstance(npClose[i], numbers.Number)==False:
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+# from loadData import loadData
+# from loadThirtyData import loadThirtyData
+# from loadHourData import loadHourData
+# from analyse import analyse
+# import json
+# from datetime import datetime
+# import requests
+# import time
+# import schedule
+# emptyArray=[]
+# with open('./website/json/signal/tradeList.json','w')as outfile:
+#     json.dump(emptyArray,outfile)
+# with open('./website/json/signal/tradeHistory.json','w')as of:
+#     json.dump(emptyArray,of)
+
+
+# def kelvinator():
+#     print("Kelvinator Started")
+#     marketStatusUrl = 'https://in.finance.yahoo.com/_finance_doubledown/api/resource/finance.market-time?bkt=finance-IN-en-IN-def&device=desktop&ecma=modern&feature=canvassOffnet%2CccOnMute%2CdisableCommentsMessage%2Cdebouncesearch100%2CdeferDarla%2CecmaModern%2CemptyServiceWorker%2CenableCCPAFooter%2CenableCMP%2CenableConsentData%2CenableGuceJs%2CenableGuceJsOverlay%2CenableNavFeatureCue%2CenablePrivacyUpdate%2CenableStreamDebounce%2CenableTheming%2CenableUpgradeLeafPage%2CenableVideoURL%2CenableYahooSans%2CenableYodleeErrorMsgCriOS%2CncpListStream%2CncpPortfolioStream%2CncpQspStream%2CncpStream%2CncpStreamIntl%2CncpTopicStream%2CnewContentAttribution%2CnewLogo%2CrelatedVideoFeature%2CvideoNativePlaylist%2CenhanceAddToWL&intl=in&lang=en-IN&partner=none&prid=4ju31mdfltmvl&region=IN&site=finance&tz=Asia%2FKolkata&ver=0.102.3964&returnMeta=true'
+#     mStatusresponse=requests.get(url=marketStatusUrl)
+#     mStatus=mStatusresponse.json()['data']['status']
+#     if(mStatus=='open'):
+#         print("Market is Open")
+#         data=loadData()
+#         dataThirty=loadThirtyData()
+#         dataHour=loadHourData()
+#         print('loaded Data')
+#         indicator=analyse(data,5)
+#         indicatorThirty=analyse(dataThirty,30)
+#         indicatorHour=analyse(dataHour,60)
+#         print('analysed Data')
+#         with open('./website/json/signal/tradeList.json') as f:
+#             tradeList = json.load(f)
+#         for symbol in indicatorHour:
+#             s=indicatorHour[symbol]
+#             p=indicatorThirty[symbol]
+#             d=indicator[symbol]
+#             i=len(s)-1
+#             j=len(p)-1
+#             k=len(d)-1
+#             hour=datetime.fromtimestamp((s[i][0]/1000)-19800).hour
+#             minute=datetime.fromtimestamp((s[i][0]/1000)-19800).minute
+#             hour0=s[i-2]
+#             hour1=s[i-1]
+#             if((hour==10 and minute>=15)or(hour==11 and minute>=15) or (hour==12 and minute>=15 )or(hour==13 and minute>=15 )or(hour==14 and minute>=15 )):
+#                 if(hour0[3]<hour0[4] and hour1[3]>hour1[4] and hour1[3]-hour1[4]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+#                     tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])              
+#                 elif(hour0[3]>hour0[4] and hour0[3]<hour1[4] and hour1[4]-hour1[3]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+#                     tradeList.append(["Sell",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])
+#     with open('./website/json/signal/tradeList.json','w')as outfile:
+#         json.dump(tradeList,outfile)
+            
+
+
+
+
+
+
+
+
+
+
+
+#print(datetime.fromtimestamp((1617097500000/1000)-19800).minute,datetime.fromtimestamp((1617097500000/1000)-19800).second)
 
 
 
