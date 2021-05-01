@@ -7,6 +7,13 @@ from analyse import analyse
 from screener import screener
 import requests
 
+
+emptyArray=[]
+with open('./website/json/signal/tradeList.json','w')as outfile:
+    json.dump(emptyArray,outfile)
+with open('./website/json/signal/tradeHistory.json','w')as of:
+    json.dump(emptyArray,of)
+
 def kelvinator():
     print("Kelvinator Started")
     marketStatusUrl = 'https://in.finance.yahoo.com/_finance_doubledown/api/resource/finance.market-time?bkt=finance-IN-en-IN-def&device=desktop&ecma=modern&feature=canvassOffnet%2CccOnMute%2CdisableCommentsMessage%2Cdebouncesearch100%2CdeferDarla%2CecmaModern%2CemptyServiceWorker%2CenableCCPAFooter%2CenableCMP%2CenableConsentData%2CenableGuceJs%2CenableGuceJsOverlay%2CenableNavFeatureCue%2CenablePrivacyUpdate%2CenableStreamDebounce%2CenableTheming%2CenableUpgradeLeafPage%2CenableVideoURL%2CenableYahooSans%2CenableYodleeErrorMsgCriOS%2CncpListStream%2CncpPortfolioStream%2CncpQspStream%2CncpStream%2CncpStreamIntl%2CncpTopicStream%2CnewContentAttribution%2CnewLogo%2CrelatedVideoFeature%2CvideoNativePlaylist%2CenhanceAddToWL&intl=in&lang=en-IN&partner=none&prid=4ju31mdfltmvl&region=IN&site=finance&tz=Asia%2FKolkata&ver=0.102.3964&returnMeta=true'
@@ -45,21 +52,6 @@ def kelvinator():
     with open('./website/json/signal/tradeList.json','w')as outfile:
         json.dump(tradeList,outfile)
         
-# start=time.time()
-
-# print("Market is Open")
-# print("Downloading Data")
-
-# dataFive=data5()
-# dataThirty=data30()
-# dataHour=data60()
-# print("Downloading Complete")
-# print("Analysing Data")
-# indicator=analyse(dataFive,5)
-# indicatorThirty=analyse(dataThirty,30)
-# indicatorHour=analyse(dataHour,60)
-# end=time.time()
-# print("Analysing Complete",end-start)
 
 
 
@@ -97,6 +89,31 @@ schedule.every().friday.at("14:16:00").do(kelvinator)
 while True:
     schedule.run_pending()
     time.sleep(1)
+
+
+
+
+
+
+
+
+
+
+# start=time.time()
+
+# print("Market is Open")
+# print("Downloading Data")
+
+# dataFive=data5()
+# dataThirty=data30()
+# dataHour=data60()
+# print("Downloading Complete")
+# print("Analysing Data")
+# indicator=analyse(dataFive,5)
+# indicatorThirty=analyse(dataThirty,30)
+# indicatorHour=analyse(dataHour,60)
+# end=time.time()
+# print("Analysing Complete",end-start)
 
 
 # start=time.time()
@@ -159,6 +176,7 @@ while True:
 # import requests
 # import time
 # import schedule
+
 # emptyArray=[]
 # with open('./website/json/signal/tradeList.json','w')as outfile:
 #     json.dump(emptyArray,outfile)
