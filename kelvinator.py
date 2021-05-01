@@ -15,9 +15,9 @@ def kelvinator():
     if(mStatus=='open'):
         print("Market is Open")
         print("Downloading Data")
-        dataFive=chart5()
-        dataThirty=chart30()
-        dataHour=chart60()
+        dataFive=data5()
+        dataThirty=data30()
+        dataHour=data60()
         print("Downloading Complete")
         print("Analysing Data")
         indicator=analyse(dataFive,5)
@@ -45,33 +45,29 @@ def kelvinator():
     with open('./website/json/signal/tradeList.json','w')as outfile:
         json.dump(tradeList,outfile)
         
-start=time.time()
+# start=time.time()
 
-print("Market is Open")
-print("Downloading Data")
+# print("Market is Open")
+# print("Downloading Data")
 
-dataFive=data5()
-dataThirty=data30()
-dataHour=data60()
-print("Downloading Complete")
-print("Analysing Data")
-indicator=analyse(dataFive,5)
-indicatorThirty=analyse(dataThirty,30)
-indicatorHour=analyse(dataHour,60)
-end=time.time()
-print("Analysing Complete",end-start)
-
-
+# dataFive=data5()
+# dataThirty=data30()
+# dataHour=data60()
+# print("Downloading Complete")
+# print("Analysing Data")
+# indicator=analyse(dataFive,5)
+# indicatorThirty=analyse(dataThirty,30)
+# indicatorHour=analyse(dataHour,60)
+# end=time.time()
+# print("Analysing Complete",end-start)
 
 
 
 
 
-#chartFive=chart5()
-#chartThirty=chart30()
-#chartHour=chart60()
 
-'''
+
+
 schedule.every().day.at("09:00:00").do(screener)
 schedule.every().monday.at("10:16:00").do(kelvinator)
 schedule.every().monday.at("11:16:00").do(kelvinator)
@@ -101,7 +97,7 @@ schedule.every().friday.at("14:16:00").do(kelvinator)
 while True:
     schedule.run_pending()
     time.sleep(1)
-'''
+
 
 # start=time.time()
 # with open('./website/json/stocksData/chart5.json') as f:
