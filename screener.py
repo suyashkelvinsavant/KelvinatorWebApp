@@ -14,7 +14,7 @@ def screener():
     data=response.json()
     slist=[]
     for stockDetail in data["finance"]["result"][0]["quotes"]:
-        if stockDetail['symbol'][-3:]==".NS":
+        if stockDetail['symbol'][-3:]==".NS" and stockDetail['symbol'].find("&")==-1:
             slist.append(stockDetail["symbol"]) 
     with open('./website/json/stockList/stockList.json','w')as outfile:
         json.dump(slist,outfile)

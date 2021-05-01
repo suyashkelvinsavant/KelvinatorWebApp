@@ -1,11 +1,8 @@
 import time,json,schedule,numbers
 import numpy as np
-from chart5 import chart5
-from chart30 import chart30
-from chart60 import chart60
-from spark5 import spark5
-from spark30 import spark30
-from spark60 import spark60
+from data5 import data5 
+from data30 import data30 
+from data60 import data60 
 from analyse import analyse
 from screener import screener
 import requests
@@ -53,19 +50,14 @@ start=time.time()
 print("Market is Open")
 print("Downloading Data")
 
-#sparkFive=spark5()
-#sparkThirty=spark30()
-sparkHour=spark60()
-#chartFive=chart5()
-#chartThirty=chart30()
-#chartHour=chart60()
-
-
+dataFive=data5()
+dataThirty=data30()
+dataHour=data60()
 print("Downloading Complete")
 print("Analysing Data")
-#indicator=analyse(sparkFive,5)
-#indicatorThirty=analyse(sparkThirty,30)
-indicatorHour=analyse(sparkHour,60)
+indicator=analyse(dataFive,5)
+indicatorThirty=analyse(dataThirty,30)
+indicatorHour=analyse(dataHour,60)
 end=time.time()
 print("Analysing Complete",end-start)
 
@@ -75,6 +67,9 @@ print("Analysing Complete",end-start)
 
 
 
+#chartFive=chart5()
+#chartThirty=chart30()
+#chartHour=chart60()
 
 '''
 schedule.every().day.at("09:00:00").do(screener)
