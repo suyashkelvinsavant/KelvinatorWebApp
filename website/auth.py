@@ -41,12 +41,33 @@ def tradeList():
     with open('./website/json/signal/tradeList.json') as jsonfile:
         tradeList = json.loads(jsonfile.read())
     return json.dumps(tradeList)
+
+
+
+
 @auth.route("/tradeHistory")
 @login_required
 def tradeHistory():
     with open('./website/json/signal/tradeHistory.json') as jsonfile:
         tradeList = json.loads(jsonfile.read())
     return json.dumps(tradeList)
+
+
+@auth.route("/trenddata")
+@login_required
+def trendData():
+    with open('./website/json/signal/trend.json') as jsonfile:
+        trend = json.loads(jsonfile.read())
+    return json.dumps(trend)
+
+
+@auth.route("/trend")
+@login_required
+def trend():
+    return render_template("trend.html",user=current_user)
+
+
+
 
 # @auth.route('/sign-up', methods=['GET', 'POST'])
 # def sign_up():

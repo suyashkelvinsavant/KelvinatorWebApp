@@ -56,10 +56,6 @@ def kelvinator():
 
 
 
-
-
-
-
 schedule.every().day.at("09:00:00").do(screener)
 schedule.every().monday.at("10:16:00").do(kelvinator)
 schedule.every().monday.at("11:16:00").do(kelvinator)
