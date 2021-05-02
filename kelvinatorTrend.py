@@ -30,11 +30,10 @@ while True:
             k=len(d)-1
             hour=datetime.fromtimestamp((s[i][0]/1000)-19800).hour
             minute=datetime.fromtimestamp((s[i][0]/1000)-19800).minute
-            hour0=s[i]
             hour1=s[i]
-            if( hour1[3]>hour1[4] and hour1[3]-hour1[4]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+            if( hour1[3]>hour1[4]  and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
                 trendList.append(["BUY",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}"])              
-            elif( hour0[3]<hour1[4] and hour1[4]-hour1[3]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
+            elif( hour1[3]<hour1[4] and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
                 trendList.append(["SELL",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}"])
     with open('./website/json/signal/trend.json','w')as outfile:
         json.dump(trendList,outfile)
