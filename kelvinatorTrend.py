@@ -21,7 +21,6 @@ while True:
     indicatorHour=analyse(dataHour,60)
     print("Analysing Complete")
     for symbol in indicatorHour:
-
             s=indicatorHour[symbol]
             p=indicatorThirty[symbol]
             d=indicator[symbol]

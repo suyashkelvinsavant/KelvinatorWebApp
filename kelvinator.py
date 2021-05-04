@@ -6,6 +6,7 @@ from data60 import data60
 from analyse import analyse
 from screener import screener
 import requests
+from datetime import datetime 
 
 
 emptyArray=[]
@@ -42,8 +43,8 @@ def kelvinator():
             k=len(d)-1
             hour=datetime.fromtimestamp((s[i][0]/1000)-19800).hour
             minute=datetime.fromtimestamp((s[i][0]/1000)-19800).minute
-            hour0=s[i-2]
-            hour1=s[i-1]
+            hour0=s[i-1]
+            hour1=s[i]
             if((hour==10 and minute>=15)or(hour==11 and minute>=15) or (hour==12 and minute>=15 )or(hour==13 and minute>=15 )or(hour==14 and minute>=15 )):
                 if(hour0[3]<hour0[4] and hour1[3]>hour1[4] and hour1[3]-hour1[4]>1 and p[j][3]>p[j][4] and d[k][3]>d[k][4]):
                     tradeList.append(["Buy",symbol,d[k][1],f"{datetime.fromtimestamp((d[k][0]/1000)-19800)}",d[k][1],"-",0,"Running"])              

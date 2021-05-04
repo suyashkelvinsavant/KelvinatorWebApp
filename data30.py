@@ -43,6 +43,8 @@ def data30():
                     break
             stock['response'][0]['timestamp']=stock['response'][0]['timestamp']+chartData[f"{stock['symbol']}"]['timestamp']#+chartTimestamp
             stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close']+chartData[f"{stock['symbol']}"]['close']#+chartClose
+            stock['response'][0]['timestamp']=stock['response'][0]['timestamp'][:len(stock['response'][0]['timestamp'])-2]         
+            stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close'][:len(stock['response'][0]['indicators']['quote'][0]['close'])-2]
             stData[f"{stock['symbol']}"]={"timestamp":stock['response'][0]['timestamp'],"close":stock['response'][0]['indicators']['quote'][0]['close']}
     with open('./website/json/stocksData/data30.json','w')as outfile:
         json.dump(stData,outfile)

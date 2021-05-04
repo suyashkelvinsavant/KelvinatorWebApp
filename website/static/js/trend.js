@@ -1,7 +1,6 @@
 function updateList() {
-    fetch("./trend").then(response => response.json()).then(tradeList => {
+    fetch("./trenddata").then(response => response.json()).then(tradeList => {
         document.getElementById("tbody").innerHTML = "";
-        tradeList = tradeList.concat(tradeHistory);
         for (i in tradeList) {
             var tr = document.createElement("tr");
             var th = document.createElement("th")
