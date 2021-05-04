@@ -45,7 +45,14 @@ def data60():
             stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close']+chartData[f"{stock['symbol']}"]['close']#+chartClose
             stock['response'][0]['timestamp']=stock['response'][0]['timestamp'][:len(stock['response'][0]['timestamp'])-2]         
             stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close'][:len(stock['response'][0]['indicators']['quote'][0]['close'])-2]
-            stData[f"{stock['symbol']}"]={"timestamp":stock['response'][0]['timestamp'],"close":stock['response'][0]['indicators']['quote'][0]['close']}
+            timestamp=[]
+            close=[]
+            for i in range(len(stock['response'][0]['indicators']['quote'][0]['close'])):
+                if stock['response'][0]['indicators']['quote'][0]['close'][i] != None :
+                    close.append(stock['response'][0]['indicators']['quote'][0]['close'][i])
+                    timestamp.append(stock['response'][0]['timestamp'][i])
+            
+            stData[f"{stock['symbol']}"]={"timestamp":timestamp,"close":close}
     with open('./website/json/stocksData/data60.json','w')as outfile:
         json.dump(stData,outfile)
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

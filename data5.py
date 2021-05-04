@@ -40,11 +40,20 @@ def data5():
                     stock['response'][0]['timestamp']=stock['response'][0]['timestamp'][:-(len(stock['response'][0]['timestamp'])-i)]
                     stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close'][:-(len(stock['response'][0]['indicators']['quote'][0]['close'])-i)]
                     break
-            stock['response'][0]['timestamp']=stock['response'][0]['timestamp'][:len(stock['response'][0]['timestamp'])-len(chartData[f"{stock['symbol']}"]['timestamp'])]+chartData[f"{stock['symbol']}"]['timestamp']          #+chartTimestamp
-            stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close'][:len(stock['response'][0]['indicators']['quote'][0]['close'])-len(chartData[f"{stock['symbol']}"]['close'])]+chartData[f"{stock['symbol']}"]['close']              #+chartClose
+            stock['response'][0]['timestamp']=stock['response'][0]['timestamp']+chartData[f"{stock['symbol']}"]['timestamp']#[:len(stock['response'][0]['timestamp'])-len(chartData[f"{stock['symbol']}"]['timestamp'])] 
+            stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close']+chartData[f"{stock['symbol']}"]['close']#[:len(stock['response'][0]['indicators']['quote'][0]['close'])-len(chartData[f"{stock['symbol']}"]['close'])]    
             stock['response'][0]['timestamp']=stock['response'][0]['timestamp'][:len(stock['response'][0]['timestamp'])-2]         
             stock['response'][0]['indicators']['quote'][0]['close']=stock['response'][0]['indicators']['quote'][0]['close'][:len(stock['response'][0]['indicators']['quote'][0]['close'])-2]             
-            stData[f"{stock['symbol']}"]={"timestamp":stock['response'][0]['timestamp'],"close":stock['response'][0]['indicators']['quote'][0]['close']}
+            timestamp=[]
+            close=[]
+            for i in range(len(stock['response'][0]['indicators']['quote'][0]['close'])):
+                if stock['response'][0]['indicators']['quote'][0]['close'][i] != None :
+                    close.append(stock['response'][0]['indicators']['quote'][0]['close'][i])
+                    timestamp.append(stock['response'][0]['timestamp'][i])
+            
+            
+            stData[f"{stock['symbol']}"]={"timestamp":timestamp,"close":close}
+
     with open('./website/json/stocksData/data5.json','w')as outfile:
         json.dump(stData,outfile)
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
