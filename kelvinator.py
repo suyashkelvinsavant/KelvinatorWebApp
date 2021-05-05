@@ -41,8 +41,9 @@ def kelvinator():
             i=len(s)-1
             j=len(p)-1
             k=len(d)-1
-            hour=datetime.fromtimestamp((s[i][0]/1000)-19800).hour
-            minute=datetime.fromtimestamp((s[i][0]/1000)-19800).minute
+            currentDate=datetime.fromtimestamp(s[i][0])
+            hour=currentDate.hour
+            minute=currentDate.minute
             hour0=s[i-1]
             hour1=s[i]
             if((hour==10 and minute>=15)or(hour==11 and minute>=15) or (hour==12 and minute>=15 )or(hour==13 and minute>=15 )or(hour==14 and minute>=15 )):
